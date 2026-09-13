@@ -23,14 +23,14 @@
     gap: 40px;
     padding: 56px 72px 48px;
   }
-  .left { display: flex; flex-direction: column; justify-content: space-between; }
+  .left { display: flex; flex-direction: column; justify-content: center; }
   .brand { display: flex; align-items: center; gap: 14px; font-size: 22px; color: #666; }
   .brand .dot { width: 12px; height: 12px; border-radius: 50%; background: #0a7; }
   h1 { font-size: 66px; line-height: 1.02; letter-spacing: -0.03em; font-weight: 700; margin-top: 28px; }
   h1 span { color: #0a7; }
   p.lede { margin-top: 22px; font-size: 26px; line-height: 1.35; color: #444; max-width: 480px; }
   .install {
-    display: inline-flex; align-items: center; gap: 12px; align-self: flex-start;
+    display: inline-flex; align-items: center; gap: 12px; align-self: flex-start; margin-top: 34px;
     font-family: 'DejaVu Sans Mono', 'Liberation Mono', monospace; font-size: 22px;
     padding: 12px 18px; border: 1.5px solid #ddd; border-radius: 10px; background: #fff;
   }
@@ -59,8 +59,8 @@
       <div class="brand"><span class="dot"></span> comark-knap</div>
       <h1>Knap templates<br />for <span>Comark</span></h1>
       <p class="lede">Variables, filters and if / for logic, rendered to Markdown before Comark parses it.</p>
+      <div class="install"><span class="p">$</span> npm i comark-knap</div>
     </div>
-    <div class="install"><span class="p">$</span> pnpm add comark-knap</div>
   </div>
   <div class="right">
     <div class="card">
