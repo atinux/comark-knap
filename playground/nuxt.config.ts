@@ -7,7 +7,7 @@ export default defineNuxtConfig({
   css: ['~/assets/style.css'],
   alias: {
     // Point at the plugin source so edits to `src/` reload without a build.
-    'comark-knap': fileURLToPath(new URL('../../src/index.ts', import.meta.url)),
+    'comark-knap': fileURLToPath(new URL('../src/index.ts', import.meta.url)),
   },
   app: {
     head: {
@@ -24,7 +24,7 @@ export default defineNuxtConfig({
   },
   vite: {
     server: {
-      fs: { allow: [fileURLToPath(new URL('../..', import.meta.url))] },
+      fs: { allow: [fileURLToPath(new URL('..', import.meta.url))] },
     },
   },
 })

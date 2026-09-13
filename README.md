@@ -207,7 +207,7 @@ can be spread in the same way where a DOM is available.
 ```bash
 pnpm install
 pnpm play      # run playground/index.ts in Node
-pnpm play:nuxt # docs + playground site in the browser (playground/nuxt)
+pnpm play:nuxt # docs + playground site in the browser (playground/)
 pnpm test      # vitest
 pnpm build     # tsdown → dist/
 ```

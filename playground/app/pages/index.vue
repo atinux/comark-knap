@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import rangi from '@comark/nuxt/plugins/rangi'
 // The docs are the repository README, rendered by Comark itself.
-import readme from '../../../../README.md?raw'
+import readme from '../../../README.md?raw'
 
 useHead({ title: 'Docs' })
 
