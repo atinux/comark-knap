@@ -86,9 +86,11 @@ from the running app and must update live.
 
 ### Using both
 
-Set `keepUnresolved: true` and register `knap()` before `binding()`. Variables
-knap cannot resolve are left in the source as `{{ name }}`, and the binding
-plugin turns them into `binding` nodes for the renderer:
+Set `keepUnresolved` and register `knap()` before `binding()`. Paths rooted at
+a name the template does not know (not a variable, frontmatter key, `for`
+iterator or `set` target) are left in the source as `{{ name }}`, and the
+binding plugin turns them into `binding` nodes for the renderer. Pass a list
+such as `['data', 'props']` to name the roots explicitly instead:
 
 ```ts
 const tree = await parseMarkdown('# {{ title | upper }}\n\nHello {{ data.user.name }}!', {
@@ -105,6 +107,8 @@ Two things to keep in mind when mixing them:
   `{{ path ?? "fallback" }}` instead, or keep such paths out of knap's reach.
 - Filters still apply to kept variables: `{{ data.x | upper }}` becomes
   `{{ DATA.X }}`.
+- Conditions on kept variables (`{% if data.flag %}`) see the placeholder
+  string, which is truthy. Decide such branches with `::if` at render time.
 
 ## Frontmatter
 
@@ -164,7 +168,7 @@ the document. That makes the plugin safe in streaming mode, where a
 | `engine` | `TemplateEngine` | — | Bring your own `createEngine()` result; overrides `filters`, `limits`, `allowRegex`. |
 | `context` | `TContext` | — | Host context forwarded to custom filters and `resolveVariable`. |
 | `resolveVariable` | `VariableResolver` | — | Resolve variables missing from `variables` and frontmatter, lazily and possibly async. |
-| `keepUnresolved` | `boolean` | `false` | Leave unresolved variables as `{{ name }}` for a render-time layer such as `binding`. |
+| `keepUnresolved` | `boolean \| string[]` | `false` | Leave variables rooted at unknown names (or at the listed names) as `{{ name }}` for a render-time layer such as `binding`. |
 | `strict` | `boolean` | `false` | Throw on template errors instead of reporting them in `tree.meta.knap`. |
 | `limits` | `RenderLimits` | knap defaults | Forwarded to `createEngine`. |
 | `allowRegex` | `boolean` | `true` | Forwarded to `createEngine`; `false` makes `split` / `replace` literal. |
@@ -202,10 +206,15 @@ can be spread in the same way where a DOM is available.
 
 ```bash
 pnpm install
-pnpm play   # run playground/index.ts
-pnpm test   # vitest
-pnpm build  # tsdown → dist/
+pnpm play      # run playground/index.ts in Node
+pnpm play:vue  # Vite + Vue playground in the browser (playground/vue-vite)
+pnpm test      # vitest
+pnpm build     # tsdown → dist/
 ```
+
+The browser playground renders a knap template with `@comark/vue`, shows the
+Markdown knap generated, and keeps a `{{ data.* }}` line for the binding
+plugin so you can see both layers side by side.
 
 ## License
 

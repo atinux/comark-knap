@@ -2,6 +2,7 @@ import { defineComarkPlugin, parseFrontmatter } from 'comark'
 import type { ComarkParsePreState, ComarkPluginFactory } from 'comark'
 import { createEngine, standardFilters, TemplateRenderError } from 'knap'
 import type {
+  ASTNode,
   FilterRegistry,
   RenderLimits,
   TemplateEngine,
@@ -60,12 +61,19 @@ export interface KnapPluginOptions<TContext = unknown> {
    */
   frontmatter?: boolean
   /**
-   * Leave variables that resolve to `undefined` in the source as
+   * Leave variables the template does not know about in the source as
    * `{{ name }}` instead of rendering them empty, so a render-time layer
    * (Comark's `binding` plugin) can pick them up later.
+   *
+   * - `true` keeps a path whose root is neither a variable, a frontmatter
+   *   key, a `{% for %}` iterator nor a `{% set %}` name. Missing properties
+   *   of known variables (`post.draft`) still resolve to `undefined`.
+   * - A list of names keeps only paths rooted at those names, e.g.
+   *   `['data', 'props']` for the binding plugin's runtime namespaces.
+   *
    * @default false
    */
-  keepUnresolved?: boolean
+  keepUnresolved?: boolean | string[]
   /**
    * Throw a `TemplateRenderError` on template errors instead of leaving the
    * offending block untouched and reporting under `tree.meta.knap`.
@@ -132,6 +140,37 @@ function parseYamlText(text: string): Record<string, unknown> | undefined {
   }
 }
 
+/** First segment of a variable path: `post.draft` → `post`, `items[0]` → `items`. */
+function rootOf(name: string): string {
+  const end = name.search(/[.[]/)
+  return end === -1 ? name : name.slice(0, end)
+}
+
+/** Names a template can resolve itself: variables, `for` iterators and `set` targets. */
+function collectKnownRoots(ast: ASTNode[], vars: TemplateVariables): Set<string> {
+  const roots = new Set(Object.keys(vars))
+  const walk = (nodes: ASTNode[]): void => {
+    for (const node of nodes) {
+      switch (node.type) {
+        case 'for':
+          roots.add(node.iterator)
+          walk(node.body)
+          break
+        case 'set':
+          roots.add(node.variable)
+          break
+        case 'if':
+          walk(node.consequent)
+          for (const branch of node.elseifs) walk(branch.body)
+          if (node.alternate) walk(node.alternate)
+          break
+      }
+    }
+  }
+  walk(ast)
+  return roots
+}
+
 /**
  * Render [knap](https://knap.md) templates in Comark documents.
  *
@@ -173,14 +212,20 @@ const plugin: ComarkPluginFactory<KnapPluginOptions<any>, KnapPluginMeta> = defi
       allowRegex: options.allowRegex,
     })
 
-  const resolver: VariableResolver<any> | undefined =
-    resolveVariable || keepUnresolved
-      ? async (name, ctx) => {
-          const value = await resolveVariable?.(name, ctx)
-          if (value !== undefined) return value
-          return keepUnresolved ? `{{ ${name} }}` : undefined
-        }
-      : undefined
+  const keptRoots = Array.isArray(keepUnresolved) ? new Set(keepUnresolved) : undefined
+
+  /** Build the resolver for one render, so placeholders know the template's own names. */
+  function createResolver(template: string, vars: TemplateVariables): VariableResolver<any> | undefined {
+    if (!resolveVariable && !keepUnresolved) return undefined
+    const knownRoots = keepUnresolved === true ? collectKnownRoots(engine.parse(template).ast, vars) : undefined
+    return async (name, ctx) => {
+      const value = await resolveVariable?.(name, ctx)
+      if (value !== undefined || !keepUnresolved) return value
+      const root = rootOf(name)
+      const keep = keptRoots ? keptRoots.has(root) : !knownRoots!.has(root)
+      return keep ? `{{ ${name} }}` : undefined
+    }
+  }
 
   /**
    * Render one template. Returns `undefined` (and records the errors) when
@@ -192,7 +237,11 @@ const plugin: ComarkPluginFactory<KnapPluginOptions<any>, KnapPluginMeta> = defi
     diagnostics: KnapDiagnostics,
   ): Promise<string | undefined> {
     if (!HAS_KNAP_SYNTAX.test(template)) return template
-    const result = await engine.render(template, { variables: vars, context, resolveVariable: resolver })
+    const result = await engine.render(template, {
+      variables: vars,
+      context,
+      resolveVariable: createResolver(template, vars),
+    })
     diagnostics.warnings.push(...result.warnings)
     if (result.errors.length > 0) {
       if (strict) throw new TemplateRenderError(result.errors)

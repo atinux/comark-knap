@@ -255,6 +255,49 @@ describe('comark-knap', () => {
       ])
     })
 
+    it('keepUnresolved does not turn missing properties of known names into placeholders', async () => {
+      const source = [
+        '{% set n = posts | length %}',
+        '{% for post in posts %}',
+        '- {{ post.title }}{% if post.draft %} (draft){% endif %}',
+        '{% endfor %}',
+        '',
+        '{{ n }} posts, {{ missing.count }} for {{ data.user }}',
+      ].join('\n')
+      const tree = await parseMarkdown(source, {
+        plugins: [
+          knap({
+            variables: { posts: [{ title: 'One' }, { title: 'Two', draft: true }] },
+            keepUnresolved: true,
+          }),
+          binding(),
+        ],
+      })
+
+      expect(tree.meta.knap.errors).toEqual([])
+      expect(tree.nodes).toEqual([
+        ['ul', {}, ['li', {}, 'One'], ['li', {}, 'Two(draft)']],
+        [
+          'p',
+          {},
+          '2 posts, ',
+          ['binding', { ':value': 'missing.count' }],
+          ' for ',
+          ['binding', { ':value': 'data.user' }],
+        ],
+      ])
+    })
+
+    it('keepUnresolved accepts an explicit list of roots', async () => {
+      const tree = await parseMarkdown('{{ data.user }} / {{ props.title }} / {{ missing }}', {
+        plugins: [knap({ keepUnresolved: ['data', 'props'] }), binding()],
+      })
+
+      expect(tree.nodes).toEqual([
+        ['p', {}, ['binding', { ':value': 'data.user' }], ' / ', ['binding', { ':value': 'props.title' }], ' /'],
+      ])
+    })
+
     it('consumes every {{ }} when keepUnresolved is off', async () => {
       const tree = await parseMarkdown('Hello {{ data.user.name }}!', {
         plugins: [knap(), binding()],
