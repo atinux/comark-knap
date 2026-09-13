@@ -24,9 +24,6 @@
   "include": [
     "src",
     "test",
-    "playground"
-  ],
-  "exclude": [
-    "playground/vue-vite"
+    "playground/index.ts"
   ]
 }

@@ -6,3 +6,8 @@ coverage
 .idea
 .vscode/*
 !.vscode/extensions.json
+
+# Nuxt playground
+.nuxt
+.output
+.data
