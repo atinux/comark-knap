@@ -46,7 +46,8 @@
     "test:watch": "vitest",
     "typecheck": "tsc -p tsconfig.json",
     "prepack": "npm run build",
-    "play:vue": "pnpm --filter comark-knap-playground-vue dev"
+    "play:vue": "pnpm --filter comark-knap-playground-vue dev",
+    "release": "release-it"
   },
   "peerDependencies": {
     "comark": ">=0.4.0"
@@ -54,6 +55,7 @@
   "devDependencies": {
     "@types/node": "^22.10.0",
     "comark": "^0.7.0",
+    "release-it": "^21.0.2",
     "tsdown": "^0.22.3",
     "tsx": "^4.22.4",
     "typescript": "^5.7.0",
@@ -65,5 +67,26 @@
   },
   "dependencies": {
     "knap": "^0.4.2"
+  },
+  "release-it": {
+    "hooks": {
+      "before:init": [
+        "pnpm typecheck",
+        "pnpm test"
+      ]
+    },
+    "git": {
+      "commitMessage": "chore(release): v${version}",
+      "tagName": "v${version}",
+      "requireBranch": "main",
+      "requireCleanWorkingDir": true
+    },
+    "github": {
+      "release": true,
+      "releaseName": "v${version}"
+    },
+    "npm": {
+      "publish": true
+    }
   }
 }

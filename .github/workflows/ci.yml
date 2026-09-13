@@ -23,3 +23,8 @@ jobs:
       - run: pnpm typecheck
       - run: pnpm test
       - run: pnpm build
+
+      # Publish a preview of the package for every push and pull request.
+      # Requires the pkg.pr.new GitHub App: https://github.com/apps/pkg-pr-new
+      - name: Publish preview to pkg.pr.new
+        run: pnpm dlx pkg-pr-new publish --compact --pnpm

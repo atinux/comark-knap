@@ -216,6 +216,21 @@ The browser playground renders a knap template with `@comark/vue`, shows the
 Markdown knap generated, and keeps a `{{ data.* }}` line for the binding
 plugin so you can see both layers side by side.
 
+Every push and pull request publishes a preview build to
+[pkg.pr.new](https://pkg.pr.new), so a branch can be tried with
+`pnpm add https://pkg.pr.new/comark-knap@<sha>` before it is released.
+
+### Release
+
+```bash
+pnpm release
+```
+
+[release-it](https://github.com/release-it/release-it) runs the type check and
+tests, bumps the version, tags, creates the GitHub release and publishes to
+npm. Run it from a clean `main` checkout with `GITHUB_TOKEN` set and an npm
+login.
+
 ## License
 
 [MIT](./LICENSE)
