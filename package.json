@@ -1,6 +1,6 @@
 {
   "name": "comark-knap",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Comark plugin that renders knap templates (variables, filters, if/for logic) before parsing",
   "keywords": [
     "comark",
