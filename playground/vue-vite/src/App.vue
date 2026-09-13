@@ -6,8 +6,12 @@ import { renderMarkdown } from 'comark/render'
 import { Binding as BindingToMarkdown } from 'comark/plugins/binding'
 import { Markdown } from '@comark/vue'
 import binding, { Binding } from '@comark/vue/plugins/binding'
+import rangi from '@comark/vue/plugins/rangi'
 import knap from 'comark-knap'
 import type { KnapDiagnostics, TemplateVariables } from 'comark-knap'
+import readme from '../../../README.md?raw'
+
+const GITHUB_URL = 'https://github.com/atinux/comark-knap'
 
 // ── Inputs ────────────────────────────────────────────────────────────────
 
@@ -109,21 +113,38 @@ watch(
 
 // ── View ──────────────────────────────────────────────────────────────────
 
+const page = ref<'playground' | 'docs'>('playground')
 const view = ref<'preview' | 'markdown'>('preview')
 const components = { Binding }
+
+// The Docs page is the repository README, rendered by Comark itself.
+const docsPlugins = [rangi()]
 </script>
 
 <template>
   <header class="masthead">
-    <strong>comark-knap</strong>
-    <span>Knap templates, rendered before Comark parses.</span>
-    <nav>
+    <a class="brand" :href="GITHUB_URL">comark-knap</a>
+    <nav class="tabs" aria-label="Page">
+      <button type="button" :aria-pressed="page === 'playground'" @click="page = 'playground'">Playground</button>
+      <button type="button" :aria-pressed="page === 'docs'" @click="page = 'docs'">Docs</button>
+    </nav>
+    <nav class="links">
+      <a :href="GITHUB_URL">GitHub ↗</a>
       <a href="https://knap.md">knap.md ↗</a>
       <a href="https://comark.dev/plugins/built-in/binding">binding plugin ↗</a>
     </nav>
   </header>
 
-  <main class="workbench">
+  <main v-if="page === 'docs'" class="docs">
+    <article class="prose">
+      <Suspense>
+        <Markdown :value="readme" :plugins="docsPlugins" />
+        <template #fallback><p>Loading docs…</p></template>
+      </Suspense>
+    </article>
+  </main>
+
+  <main v-else class="workbench">
     <section class="inputs">
       <label class="field">
         <span class="label">Template <small>knap · rendered at parse time</small></span>
@@ -163,7 +184,7 @@ const components = { Binding }
         </span>
       </div>
 
-      <div v-if="view === 'preview'" class="document">
+      <div v-if="view === 'preview'" class="document prose">
         <Suspense v-if="tree">
           <Markdown :value="tree" :components="components" :data="data" />
           <template #fallback><p>Rendering…</p></template>

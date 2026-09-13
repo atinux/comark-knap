@@ -17,7 +17,7 @@ importers:
         version: 22.19.21
       comark:
         specifier: ^0.7.0
-        version: 0.7.0
+        version: 0.7.0(rangi@2.2.0)
       release-it:
         specifier: ^21.0.2
         version: 21.0.2(@types/node@22.19.21)
@@ -38,13 +38,16 @@ importers:
     dependencies:
       '@comark/vue':
         specifier: ^0.7.0
-        version: 0.7.0(vue@3.5.42(typescript@5.9.3))
+        version: 0.7.0(rangi@2.2.0)(vue@3.5.42(typescript@5.9.3))
       comark:
         specifier: ^0.7.0
-        version: 0.7.0
+        version: 0.7.0(rangi@2.2.0)
       comark-knap:
         specifier: workspace:*
         version: link:../..
+      rangi:
+        specifier: ^2.2.0
+        version: 2.2.0
       vue:
         specifier: ^3.5.0
         version: 3.5.42(typescript@5.9.3)
@@ -1597,6 +1600,10 @@ packages:
   quickjs-wasi@2.2.0:
     resolution: {integrity: sha512-zQxXmQMrEoD3S+jQdYsloq4qAuaxKFHZj6hHqOYGwB2iQZH+q9e/lf5zQPXCKOk0WJuAjzRFbO4KwHIp2D05Iw==}
 
+  rangi@2.2.0:
+    resolution: {integrity: sha512-zMXLNs+3ejB2dg5kjJdNbllNq6FrdtEbHA9f3POxbSIHb0CyslALbY8qSDCE2r+/6Ku7xaVHKtnC5qHbF2SgNg==}
+    hasBin: true
+
   rc9@3.1.0:
     resolution: {integrity: sha512-ufjkNVzbRHKcCOmTahZkmVsyc3W+MSk3jY03m+a7tGHkIsdVMG9l10/3HvFbWkkKzY5VFp3pkRsIo/UYgmFL7Q==}
 
@@ -2004,9 +2011,9 @@ snapshots:
       '@babel/helper-string-parser': 8.0.0
       '@babel/helper-validator-identifier': 8.0.0
 
-  '@comark/vue@0.7.0(vue@3.5.42(typescript@5.9.3))':
+  '@comark/vue@0.7.0(rangi@2.2.0)(vue@3.5.42(typescript@5.9.3))':
     dependencies:
-      comark: 0.7.0
+      comark: 0.7.0(rangi@2.2.0)
       vue: 3.5.42(typescript@5.9.3)
     transitivePeerDependencies:
       - rangi
@@ -2751,12 +2758,14 @@ snapshots:
 
   cli-width@4.1.0: {}
 
-  comark@0.7.0:
+  comark@0.7.0(rangi@2.2.0):
     dependencies:
       entities: 8.0.0
       htmlparser2: 12.0.0
       js-yaml: 5.4.1
       markdown-exit: 1.1.0-beta.2
+    optionalDependencies:
+      rangi: 2.2.0
 
   confbox@0.2.4: {}
 
@@ -3235,6 +3244,8 @@ snapshots:
   quansync@1.0.0: {}
 
   quickjs-wasi@2.2.0: {}
+
+  rangi@2.2.0: {}
 
   rc9@3.1.0:
     dependencies:

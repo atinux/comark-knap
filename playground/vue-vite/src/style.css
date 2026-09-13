@@ -49,10 +49,29 @@ a {
   padding: 1rem 1.5rem;
   border-bottom: 1px solid var(--border);
 }
-.masthead span {
-  color: var(--muted);
+.masthead .brand {
+  font-weight: 700;
+  text-decoration: none;
 }
-.masthead nav {
+.masthead .tabs {
+  display: flex;
+  gap: 0.25rem;
+}
+.masthead .tabs button {
+  padding: 0.35rem 0.7rem;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--muted);
+  font: inherit;
+  cursor: pointer;
+}
+.masthead .tabs button[aria-pressed='true'] {
+  color: var(--fg);
+  background: var(--surface);
+  border-color: var(--border);
+}
+.masthead .links {
   margin-left: auto;
   display: flex;
   gap: 1rem;
@@ -167,31 +186,70 @@ textarea {
   padding: 1.5rem;
   max-width: 68ch;
 }
-.document h1 {
+.docs {
+  padding: 2rem 1.5rem 4rem;
+}
+.docs .prose {
+  max-width: 76ch;
+  margin: 0 auto;
+}
+.prose h1 {
   margin-top: 0;
 }
-.document table {
-  border-collapse: collapse;
+.prose h2 {
+  margin-top: 2.5rem;
+  padding-bottom: 0.3rem;
+  border-bottom: 1px solid var(--border);
 }
-.document th,
-.document td {
+.prose h3 {
+  margin-top: 2rem;
+}
+.prose table {
+  border-collapse: collapse;
+  display: block;
+  overflow-x: auto;
+}
+.prose th,
+.prose td {
   padding: 0.35rem 0.75rem;
   border-bottom: 1px solid var(--border);
   text-align: left;
+  vertical-align: top;
 }
-.document blockquote {
+.prose code {
+  padding: 0.1em 0.3em;
+  border-radius: 4px;
+  background: var(--surface);
+}
+.prose pre {
+  padding: 0.9rem 1rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  overflow-x: auto;
+  background: var(--surface);
+}
+.prose pre code {
+  padding: 0;
+  background: transparent;
+}
+.prose blockquote {
   margin: 1rem 0;
   padding: 0.5rem 1rem;
   border-left: 3px solid var(--border);
   background: var(--surface);
 }
-.document blockquote[as='tip'] {
+.prose blockquote[as='tip'] {
   border-color: var(--tip);
 }
-.document blockquote[as='warning'] {
+.prose blockquote[as='warning'] {
   border-color: var(--warning);
 }
-.document blockquote[as]::before {
+@media (prefers-color-scheme: dark) {
+  .prose span[style*='--shiki-dark'] {
+    color: var(--shiki-dark) !important;
+  }
+}
+.prose blockquote[as]::before {
   content: attr(as);
   display: block;
   font-size: 11px;
