@@ -46,8 +46,8 @@
     "test:watch": "vitest",
     "typecheck": "tsc -p tsconfig.json",
     "prepack": "npm run build",
-    "play:vue": "pnpm --filter comark-knap-playground-vue dev",
-    "release": "release-it"
+    "release": "release-it",
+    "play:nuxt": "pnpm --filter comark-knap-playground dev"
   },
   "peerDependencies": {
     "comark": ">=0.4.0"

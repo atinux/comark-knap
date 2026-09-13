@@ -207,14 +207,15 @@ can be spread in the same way where a DOM is available.
 ```bash
 pnpm install
 pnpm play      # run playground/index.ts in Node
-pnpm play:vue  # Vite + Vue playground in the browser (playground/vue-vite)
+pnpm play:nuxt # docs + playground site in the browser (playground/nuxt)
 pnpm test      # vitest
 pnpm build     # tsdown → dist/
 ```
 
-The browser playground renders a knap template with `@comark/vue`, shows the
-Markdown knap generated, and keeps a `{{ data.* }}` line for the binding
-plugin so you can see both layers side by side.
+The Nuxt site serves this README at `/` and a playground at `/play`, both
+server-rendered and prerendered. The playground renders a knap template with
+`@comark/nuxt`, shows the Markdown knap generated, and keeps a `{{ data.* }}`
+line for the binding plugin so you can see both layers side by side.
 
 Every push and pull request publishes a preview build to
 [pkg.pr.new](https://pkg.pr.new), so a branch can be tried with
@@ -233,4 +234,4 @@ login.
 
 ## License
 
-[MIT](./LICENSE)
+[MIT](https://github.com/atinux/comark-knap/blob/main/LICENSE)

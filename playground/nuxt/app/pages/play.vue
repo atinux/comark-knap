@@ -1,17 +1,12 @@
 <script setup lang="ts">
-import { computed, reactive, ref, shallowRef, watch } from 'vue'
 import { parseMarkdown } from 'comark'
-import type { MarkdownDocument } from 'comark'
 import { renderMarkdown } from 'comark/render'
 import { Binding as BindingToMarkdown } from 'comark/plugins/binding'
-import { Markdown } from '@comark/vue'
-import binding, { Binding } from '@comark/vue/plugins/binding'
-import rangi from '@comark/vue/plugins/rangi'
+import binding, { Binding } from '@comark/nuxt/plugins/binding'
 import knap from 'comark-knap'
 import type { KnapDiagnostics, TemplateVariables } from 'comark-knap'
-import readme from '../../../README.md?raw'
 
-const GITHUB_URL = 'https://github.com/atinux/comark-knap'
+useHead({ title: 'Playground' })
 
 // ── Inputs ────────────────────────────────────────────────────────────────
 
@@ -52,9 +47,9 @@ const variablesJson = ref(
       name: 'an imported note',
       published: '2026-09-13',
       posts: [
-        { title: 'Turn data into Markdown', url: '/knap' },
-        { title: 'Components in Markdown', url: '/comark' },
-        { title: 'Draft ideas', url: '/draft', draft: true },
+        { title: 'Turn data into Markdown', url: 'https://knap.md' },
+        { title: 'Components in Markdown', url: 'https://comark.dev' },
+        { title: 'Knap on GitHub', url: 'https://github.com/obsidianmd/knap', draft: true },
       ],
       stats: [
         { metric: 'users', value: 1200 },
@@ -69,7 +64,7 @@ const variablesJson = ref(
 /** Runtime data resolved by the binding plugin at render time. */
 const data = reactive({ viewer: { name: 'Ada', plan: 'pro' } })
 
-// ── Parsing ───────────────────────────────────────────────────────────────
+// ── Parsing (on the server for the first render, then on every edit) ──────
 
 const jsonError = ref('')
 const variables = computed<TemplateVariables>(() => {
@@ -83,68 +78,44 @@ const variables = computed<TemplateVariables>(() => {
   }
 })
 
-const tree = shallowRef<MarkdownDocument>()
-const generated = ref('')
-const diagnostics = computed<KnapDiagnostics>(
-  () => (tree.value?.meta.knap as KnapDiagnostics | undefined) ?? { errors: [], warnings: [] },
+// Debounce keystrokes before re-parsing.
+const debouncedTemplate = ref(template.value)
+let timer: ReturnType<typeof setTimeout> | undefined
+watch(template, (value) => {
+  clearTimeout(timer)
+  timer = setTimeout(() => (debouncedTemplate.value = value), 120)
+})
+
+const { data: result, error } = await useAsyncData(
+  'play',
+  async () => {
+    const tree = await parseMarkdown(debouncedTemplate.value, {
+      // `keepUnresolved` leaves paths with unknown roots (`data.*`) for `binding()`.
+      plugins: [knap({ variables: variables.value, keepUnresolved: true }), binding()],
+    })
+    // The exact markdown Comark parsed, serialized back from the tree.
+    const markdown = await renderMarkdown(tree, { components: { Binding: BindingToMarkdown } })
+    return { tree, markdown }
+  },
+  {
+    watch: [debouncedTemplate, variables],
+    // Reuse the server payload for hydration only; every edit must re-parse.
+    getCachedData: (key, nuxtApp, { cause }) => (cause === 'initial' ? nuxtApp.payload.data[key] : undefined),
+  },
 )
 
-let timer: ReturnType<typeof setTimeout> | undefined
-let run = 0
-watch(
-  [template, variables],
-  () => {
-    clearTimeout(timer)
-    timer = setTimeout(async () => {
-      const current = ++run
-      const doc = await parseMarkdown(template.value, {
-        // `keepUnresolved` leaves paths with unknown roots (`data.*`) for `binding()`.
-        plugins: [knap({ variables: variables.value, keepUnresolved: true }), binding()],
-      })
-      // The exact markdown Comark parsed, serialized back from the tree.
-      const markdown = await renderMarkdown(doc, { components: { Binding: BindingToMarkdown } })
-      if (current !== run) return
-      tree.value = doc
-      generated.value = markdown
-    }, 120)
-  },
-  { immediate: true },
+const diagnostics = computed<KnapDiagnostics>(
+  () => (result.value?.tree.meta.knap as KnapDiagnostics | undefined) ?? { errors: [], warnings: [] },
 )
 
 // ── View ──────────────────────────────────────────────────────────────────
 
-const page = ref<'playground' | 'docs'>('playground')
 const view = ref<'preview' | 'markdown'>('preview')
 const components = { Binding }
-
-// The Docs page is the repository README, rendered by Comark itself.
-const docsPlugins = [rangi()]
 </script>
 
 <template>
-  <header class="masthead">
-    <a class="brand" :href="GITHUB_URL">comark-knap</a>
-    <nav class="tabs" aria-label="Page">
-      <button type="button" :aria-pressed="page === 'playground'" @click="page = 'playground'">Playground</button>
-      <button type="button" :aria-pressed="page === 'docs'" @click="page = 'docs'">Docs</button>
-    </nav>
-    <nav class="links">
-      <a :href="GITHUB_URL">GitHub ↗</a>
-      <a href="https://knap.md">knap.md ↗</a>
-      <a href="https://comark.dev/plugins/built-in/binding">binding plugin ↗</a>
-    </nav>
-  </header>
-
-  <main v-if="page === 'docs'" class="docs">
-    <article class="prose">
-      <Suspense>
-        <Markdown :value="readme" :plugins="docsPlugins" />
-        <template #fallback><p>Loading docs…</p></template>
-      </Suspense>
-    </article>
-  </main>
-
-  <main v-else class="workbench">
+  <main class="workbench">
     <section class="inputs">
       <label class="field">
         <span class="label">Template <small>knap · rendered at parse time</small></span>
@@ -185,14 +156,12 @@ const docsPlugins = [rangi()]
       </div>
 
       <div v-if="view === 'preview'" class="document prose">
-        <Suspense v-if="tree">
-          <Markdown :value="tree" :components="components" :data="data" />
-          <template #fallback><p>Rendering…</p></template>
-        </Suspense>
+        <Markdown v-if="result" :value="result.tree" :components="components" :data="data" />
       </div>
-      <pre v-else class="source"><code>{{ generated }}</code></pre>
+      <pre v-else class="source"><code>{{ result?.markdown }}</code></pre>
 
-      <ul v-if="diagnostics.errors.length || diagnostics.warnings.length" class="diagnostics">
+      <ul v-if="error || diagnostics.errors.length || diagnostics.warnings.length" class="diagnostics">
+        <li v-if="error" class="error">{{ error.message }}</li>
         <li v-for="(e, i) in diagnostics.errors" :key="`e${i}`" class="error">
           {{ e.code }} · line {{ e.line }}:{{ e.column }} · {{ e.message }}
         </li>

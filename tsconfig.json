@@ -27,6 +27,6 @@
     "playground"
   ],
   "exclude": [
-    "playground/vue-vite"
+    "playground/nuxt"
   ]
 }
