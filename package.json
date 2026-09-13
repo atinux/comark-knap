@@ -1,22 +1,25 @@
 {
-  "name": "your-comark-plugin",
+  "name": "comark-knap",
   "version": "0.0.0",
-  "description": "TODO: A Comark plugin that ...",
+  "description": "Comark plugin that renders knap templates (variables, filters, if/for logic) before parsing",
   "keywords": [
     "comark",
     "markdown",
     "mdc",
-    "plugin"
+    "plugin",
+    "knap",
+    "template",
+    "obsidian"
   ],
-  "homepage": "https://github.com/your-name/your-comark-plugin#readme",
+  "homepage": "https://github.com/atinux/comark-knap#readme",
   "bugs": {
-    "url": "https://github.com/your-name/your-comark-plugin/issues"
+    "url": "https://github.com/atinux/comark-knap/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/your-name/your-comark-plugin.git"
+    "url": "git+https://github.com/atinux/comark-knap.git"
   },
-  "author": "Your Name <you@example.com>",
+  "author": "Sébastien Chopin <atinux@gmail.com>",
   "license": "MIT",
   "type": "module",
   "sideEffects": false,
@@ -49,7 +52,7 @@
   },
   "devDependencies": {
     "@types/node": "^22.10.0",
-    "comark": "^0.4.0",
+    "comark": "^0.7.0",
     "tsdown": "^0.22.3",
     "tsx": "^4.22.4",
     "typescript": "^5.7.0",
@@ -58,5 +61,8 @@
   "packageManager": "pnpm@11.5.2",
   "engines": {
     "node": ">=20"
+  },
+  "dependencies": {
+    "knap": "^0.4.2"
   }
 }

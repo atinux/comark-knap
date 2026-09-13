@@ -7,13 +7,17 @@ settings:
 importers:
 
   .:
+    dependencies:
+      knap:
+        specifier: ^0.4.2
+        version: 0.4.2
     devDependencies:
       '@types/node':
         specifier: ^22.10.0
         version: 22.19.21
       comark:
-        specifier: ^0.4.0
-        version: 0.4.0
+        specifier: ^0.7.0
+        version: 0.7.0
       tsdown:
         specifier: ^0.22.3
         version: 0.22.3(tsx@4.22.4)(typescript@5.9.3)
@@ -527,22 +531,28 @@ packages:
     resolution: {integrity: sha512-NUPRluOfOiTKBKvWPtSD4PhFvWCqOi0BGStNWs57X9js7XGTprSmFoz5F0tWhR4WPjNeR9jXqdC7/UpSJTnlRg==}
     engines: {node: '>=18'}
 
-  comark@0.4.0:
-    resolution: {integrity: sha512-s+wZc9FDgxJDxS3oLhDhthuc8EFggd7oEQaGKEFSw/UbECEwM3qMgW/T3dk6eoNTuy+PNSAyPQtjyKZJfudlbA==}
+  comark@0.7.0:
+    resolution: {integrity: sha512-680hLtUOBcvBEJCD+iCU20jk5TrIJlIcE6X4npdC4x7LBhCvmiYJgByozR2fKav6DYw7AYoXsJVae65kXV6Qhw==}
     peerDependencies:
       beautiful-mermaid: ^1.1.3
-      katex: ^0.16.45
-      shiki: ^4.0.0
+      katex: ^0.17.0
+      rangi: ^2.2.0
+      shiki: ^4.3.1
     peerDependenciesMeta:
       beautiful-mermaid:
         optional: true
       katex:
+        optional: true
+      rangi:
         optional: true
       shiki:
         optional: true
 
   convert-source-map@2.0.0:
     resolution: {integrity: sha512-Kvp459HrV2FEJ1CAsi1Ku+MY3kasH19TFykTz2xWmMeq6bk2NU3XXvfJ+Q61m0xktWwt+1HSYf3JZsTms3aRJg==}
+
+  dayjs@1.11.23:
+    resolution: {integrity: sha512-QDTCU0M0MxR3hQfnlDJfwekQiaanm1ubOD231u73WBckQ/fsamwRLiE2GBz6D3a/xF1NgfiDLJjXBa1hYOYTtQ==}
 
   defu@6.1.7:
     resolution: {integrity: sha512-7z22QmUWiQ/2d0KkdYmANbRUVABpZ9SNYyH5vx6PZ+nE5bcC0l7uFvEfHlyld/HcGBFTL536ClDt3DEcSlEJAQ==}
@@ -632,13 +642,18 @@ packages:
     resolution: {integrity: sha512-NkJQA7oZ4YHQhd2+H3BoRFKF3d/XNsiKpHZCQEMH9pDX27hQQLsTyOocyRgaIVtf8gHX3Nt3LPkR4e5EdtPAGQ==}
     engines: {node: ^22.18.0 || >=24.0.0}
 
-  js-yaml@4.2.0:
-    resolution: {integrity: sha512-ePWsvanv0DWuDRsW8dnt+R4jQ31SCRCQ7hhNcPXZPsoBZiemuZNYGf7adZdqX2D86j6rvKp3RpCxVTSb8WQlOw==}
+  js-yaml@5.4.1:
+    resolution: {integrity: sha512-28R/k+NAjeuf7+CKlTxWZVExJGwVVLwY06DgEnOMz2gEpfNkDcD7QvyiVPT0xy0XXhU8vHsd4Ot42OOPdJG7dQ==}
     hasBin: true
 
   jsesc@3.1.0:
     resolution: {integrity: sha512-/sM3dO2FOzXjKQhJuo0Q173wf2KOo8t4I8vHy6lF9poUp7bKT0/NHE8fPX23PwfhnykfqnC2xRxOnVw5XuGIaA==}
     engines: {node: '>=6'}
+    hasBin: true
+
+  knap@0.4.2:
+    resolution: {integrity: sha512-mg3mVlRjotvsanok6a04x7fgtVFtg7invc61IJaA96C1KxBR+IXLN1PuezpfaLv9zPNAM1XPgT4o+6v0SpS8Zg==}
+    engines: {node: '>=20'}
     hasBin: true
 
   lightningcss-android-arm64@1.32.0:
@@ -721,8 +736,8 @@ packages:
   magic-string@0.30.21:
     resolution: {integrity: sha512-vd2F4YUyEXKGcLHoq+TEyCjxueSeHnFxyyjNp80yg0XV4vUhnDer/lvvlqM/arB5bXQN5K2/3oinyCRyx8T2CQ==}
 
-  markdown-exit@1.0.0-beta.9:
-    resolution: {integrity: sha512-5tzrMKMF367amyBly131vm6eGuWRL2DjBqWaFmPzPbLyuxP0XOmyyyroOAIXuBAMF/3kZbbfqOxvW/SotqKqbQ==}
+  markdown-exit@1.1.0-beta.2:
+    resolution: {integrity: sha512-8CzMGVlFZ4DEfnc8KU+4ycUW2SIOuiXqCHD7z51ecVEi/weyc0f2ylQbCm4KoKuVlTZSuMUMnWT0hTyquZ7anQ==}
 
   mdurl@2.0.0:
     resolution: {integrity: sha512-Lf+9+2r+Tdp5wXDXC4PcIBjTDtq4UKjCPMQhKIuzpJNW0b96kVqSwW0bT7FhRSfmAiFYgP+SCRvdrDozfh0U5w==}
@@ -1326,14 +1341,16 @@ snapshots:
 
   chai@6.2.2: {}
 
-  comark@0.4.0:
+  comark@0.7.0:
     dependencies:
       entities: 8.0.0
       htmlparser2: 12.0.0
-      js-yaml: 4.2.0
-      markdown-exit: 1.0.0-beta.9
+      js-yaml: 5.4.1
+      markdown-exit: 1.1.0-beta.2
 
   convert-source-map@2.0.0: {}
+
+  dayjs@1.11.23: {}
 
   defu@6.1.7: {}
 
@@ -1424,11 +1441,15 @@ snapshots:
 
   import-without-cache@0.4.0: {}
 
-  js-yaml@4.2.0:
+  js-yaml@5.4.1:
     dependencies:
       argparse: 2.0.1
 
   jsesc@3.1.0: {}
+
+  knap@0.4.2:
+    dependencies:
+      dayjs: 1.11.23
 
   lightningcss-android-arm64@1.32.0:
     optional: true
@@ -1487,7 +1508,7 @@ snapshots:
     dependencies:
       '@jridgewell/sourcemap-codec': 1.5.5
 
-  markdown-exit@1.0.0-beta.9:
+  markdown-exit@1.1.0-beta.2:
     dependencies:
       '@types/linkify-it': 5.0.0
       '@types/mdurl': 2.0.0
