@@ -1,5 +1,11 @@
 # comark-knap
 
+[![npm version](https://img.shields.io/npm/v/comark-knap?color=black)](https://npmx.dev/comark-knap)
+[![npm downloads](https://img.shields.io/npm/dm/comark-knap?color=black)](https://npm.chart.dev/comark-knap)
+[![CI](https://img.shields.io/github/actions/workflow/status/atinux/comark-knap/ci.yml?branch=main&color=black)](https://github.com/atinux/comark-knap/actions/workflows/ci.yml)
+[![Documentation](https://img.shields.io/badge/Documentation-black?logo=readme&logoColor=white)](https://comark-knap.vercel.app)
+[![license](https://img.shields.io/github/license/atinux/comark-knap?color=black)](https://github.com/atinux/comark-knap/blob/main/LICENSE)
+
 A [Comark](https://comark.dev) plugin that renders [knap](https://knap.md)
 templates before parsing. Write Markdown with knap variables, filters and
 `if` / `for` logic, hand it to Comark with your data, and get a regular Comark
