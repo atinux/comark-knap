@@ -2,8 +2,7 @@ import { fileURLToPath } from 'node:url'
 
 export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
-  modules: ['@comark/nuxt'],
-  ssr: true,
+  modules: ['@comark/nuxt', '@vercel/analytics'],
   css: ['~/assets/style.css'],
   alias: {
     // Point at the plugin source so edits to `src/` reload without a build.

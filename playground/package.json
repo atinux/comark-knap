@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@comark/nuxt": "^0.7.0",
+    "@vercel/analytics": "2.0.1",
     "comark": "^0.7.0",
     "comark-knap": "workspace:*",
     "nuxt": "^4.5.2",
