@@ -1,0 +1,87 @@
+<!doctype html>
+<!--
+  Source of playground/public/og.png (1200×630).
+  Regenerate from playground/ with:
+    npx playwright screenshot --viewport-size=1200,630 og/index.html public/og.png
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<style>
+  * { box-sizing: border-box; margin: 0; }
+  html, body { width: 1200px; height: 630px; overflow: hidden; }
+  body {
+    font-family: Inter, 'Segoe UI', 'Liberation Sans', Arial, sans-serif;
+    color: #111;
+    background: #fff;
+    background-image:
+      linear-gradient(#0000 0, #0000 0),
+      radial-gradient(circle at 1px 1px, #e5e5e5 1px, transparent 0);
+    background-size: 100% 100%, 28px 28px;
+    display: grid;
+    grid-template-columns: 520px 1fr;
+    gap: 40px;
+    padding: 56px 72px 48px;
+  }
+  .left { display: flex; flex-direction: column; justify-content: space-between; }
+  .brand { display: flex; align-items: center; gap: 14px; font-size: 22px; color: #666; }
+  .brand .dot { width: 12px; height: 12px; border-radius: 50%; background: #0a7; }
+  h1 { font-size: 66px; line-height: 1.02; letter-spacing: -0.03em; font-weight: 700; margin-top: 28px; }
+  h1 span { color: #0a7; }
+  p.lede { margin-top: 22px; font-size: 26px; line-height: 1.35; color: #444; max-width: 480px; }
+  .install {
+    display: inline-flex; align-items: center; gap: 12px; align-self: flex-start;
+    font-family: 'DejaVu Sans Mono', 'Liberation Mono', monospace; font-size: 22px;
+    padding: 12px 18px; border: 1.5px solid #ddd; border-radius: 10px; background: #fff;
+  }
+  .install .p { color: #999; }
+  .right { display: flex; flex-direction: column; gap: 14px; justify-content: center; }
+  .card {
+    border: 1.5px solid #ddd; border-radius: 14px; background: #fff; overflow: hidden;
+    box-shadow: 0 8px 30px rgba(0,0,0,.06);
+  }
+  .card .bar { display: flex; align-items: center; gap: 8px; padding: 10px 16px; border-bottom: 1px solid #eee; font-size: 14px; color: #888; letter-spacing: .06em; text-transform: uppercase; }
+  .card .bar b { color: #0a7; font-weight: 600; }
+  pre { font-family: 'DejaVu Sans Mono', 'Liberation Mono', monospace; font-size: 18.5px; line-height: 1.5; padding: 16px 20px; white-space: pre; }
+  .k { color: #b35c00; } .v { color: #0a66c2; } .f { color: #7b3fc4; } .t { color: #333; }
+  .out { padding: 14px 20px 14px; font-size: 18px; line-height: 1.45; }
+  .out h2 { font-size: 26px; letter-spacing: -0.02em; margin-bottom: 8px; }
+  .out ul { padding-left: 22px; margin-top: 4px; }
+  .out table { border-collapse: collapse; margin-top: 10px; font-size: 16px; }
+  .out td, .out th { padding: 4px 14px 4px 0; text-align: left; border-bottom: 1px solid #eee; }
+  .out th { color: #666; font-weight: 600; }
+  .arrow { align-self: center; color: #0a7; font-size: 26px; line-height: 1; margin: -4px 0; }
+</style>
+</head>
+<body>
+  <div class="left">
+    <div>
+      <div class="brand"><span class="dot"></span> comark-knap</div>
+      <h1>Knap templates<br />for <span>Comark</span></h1>
+      <p class="lede">Variables, filters and if / for logic, rendered to Markdown before Comark parses it.</p>
+    </div>
+    <div class="install"><span class="p">$</span> pnpm add comark-knap</div>
+  </div>
+  <div class="right">
+    <div class="card">
+      <div class="bar"><b>knap</b> · template</div>
+<pre><span class="t"># </span><span class="v">{{ title | upper }}</span>
+
+<span class="k">{% for post in posts %}</span>
+<span class="t">- [</span><span class="v">{{ post.title }}</span><span class="t">](</span><span class="v">{{ post.url }}</span><span class="t">)</span>
+<span class="k">{% endfor %}</span>
+
+<span class="v">{{ stats | </span><span class="f">table</span><span class="v"> }}</span></pre>
+    </div>
+    <div class="arrow">▼</div>
+    <div class="card">
+      <div class="bar"><b>comark</b> · rendered</div>
+      <div class="out">
+        <h2>AN IMPORTED NOTE</h2>
+        <ul><li>Turn data into Markdown</li><li>Components in Markdown</li></ul>
+        <table><tr><th>metric</th><th>value</th></tr><tr><td>users</td><td>1200</td></tr></table>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

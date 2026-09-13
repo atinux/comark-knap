@@ -7,7 +7,8 @@
     "build": "nuxt build",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "postinstall": "nuxt prepare"
+    "postinstall": "nuxt prepare",
+    "og": "playwright screenshot --viewport-size=1200,630 og/index.html public/og.png"
   },
   "dependencies": {
     "@comark/nuxt": "^0.7.0",

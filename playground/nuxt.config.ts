@@ -9,6 +9,12 @@ export default defineNuxtConfig({
     // Point at the plugin source so edits to `src/` reload without a build.
     'comark-knap': fileURLToPath(new URL('../src/index.ts', import.meta.url)),
   },
+  runtimeConfig: {
+    public: {
+      // Set NUXT_PUBLIC_SITE_URL in production for absolute Open Graph URLs.
+      siteUrl: '',
+    },
+  },
   app: {
     head: {
       htmlAttrs: { lang: 'en' },
