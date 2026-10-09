@@ -81,7 +81,7 @@ Both use `{{ … }}`, but they answer different questions.
 | When it runs | Parse time (`pre` hook) | Render time, in every renderer |
 | Input | Any value you pass as `variables` (plus frontmatter) | `frontmatter`, `data`, `meta`, `props` namespaces |
 | Expressions | Full knap: filters, comparisons, `and` / `or`, `??` | A dot-path and an optional `\|\| default` |
-| Logic | `{% if %}`, `{% elseif %}`, `{% for %}`, `{% set %}` | `::if{:value="…"}` component (+ `::for` on `main`) |
+| Logic | `{% if %}`, `{% elseif %}`, `{% for %}`, `{% set %}` | `::if{:value="…"}` component |
 | Output | Markdown text, then parsed | `binding` / `if` nodes resolved by the renderer |
 | Reactive to `data` changes | No | Yes (Vue, React, Svelte, Angular) |
 | Round-trips through `renderMarkdown` | No (already rendered) | Yes, via the `Binding` handler |
